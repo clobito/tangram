@@ -33,7 +33,8 @@ lights:
 
 scene:
     background:
-        color: '#9dc3de'
+        #color: '#9dc3de'
+		color: '#C20073'
 
 textures:
     pois:

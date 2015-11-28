@@ -230,6 +230,8 @@ Enjoy!
     // For easier debugging access
 
     // GUI options for rendering style/effects
+	// Combo de estilos
+	//Definición de colores de la región => sección settings
     var style_options = {
         effect: url_style || '',
         options: {
@@ -299,8 +301,12 @@ Enjoy!
             },
             'rainbow': {
                 setup: function (style) {
-                    scene.config.layers.earth.draw.polygons.color = '#333';
-                    scene.config.layers.roads.draw.lines.color = '#777';
+                    //Personalizar color poligonos de manera dinàmica
+					//scene.config.layers.earth.draw.polygons.color = '#333';
+					scene.config.layers.earth.draw.polygons.color = '#1B008F';
+					//Personalizar color calles, carreras
+                    //scene.config.layers.roads.draw.lines.color = '#777';
+					scene.config.layers.roads.draw.lines.color = '#730016';
                     scene.config.layers.poi_icons.visible = false;
                     scene.config.layers.buildings.draw.polygons.style = style;
                     scene.config.layers.buildings.extruded.draw.polygons.style = style;
@@ -313,13 +319,17 @@ Enjoy!
             },
             'elevator': {
                 setup: function (style) {
-                    scene.config.layers.buildings.extruded.draw.polygons.style = style;
+                    alert("Style Elevator =>"+style);
+					scene.config.layers.buildings.extruded.draw.polygons.style = style;
                 }
             },
             'halftone': {
                 setup: function (style) {
-                    scene.config.scene.background.color = 'black';
-
+                    
+					//scene.config.scene.background.color = 'black';
+					//scene.config.scene.background.color = '#E18B00';
+					
+					//Configuración de las capas
                     var layers = scene.config.layers;
                     layers.earth.draw.polygons.style = 'halftone_polygons';
                     layers.water.draw.polygons.style = 'halftone_polygons';
