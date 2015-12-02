@@ -166,9 +166,14 @@ styles:
 
 sources:
     # When commented, demo main.js will set source based on URL - uncomment for testing
-    # osm:
-    #     type: TopoJSON
+    # Date Updated: 30/11/2015
+    # Changes: Activate osm for load information - Manzanas de Bogotá
+    osm:
+    #     Date Updated: 30/11/2015
+    #     Changes: Create vector tile key
+        type: TopoJSON
     #     url:  http://vector.mapzen.com/osm/all/{z}/{x}/{y}.topojson?api_key=vector-tiles-HqUVidw
+        url:  http://vector.mapzen.com/osm/all/{z}/{x}/{y}.topojson?api_key=vector-tiles-PNP2Dn4
     #     # Data filtering demo with 'scripts' and 'transform' properties:
     #     # Tile data is passed through a 'transform' pre-processing function before Tangram geometry is built.
     #     # 'transform' adds an 'intersects_park' property to each road that intersects a park feature.
@@ -204,6 +209,13 @@ sources:
     #     #         }
     #     #         return data;
     #     #     }
+    # Fecha actualizado: 30/11/2015
+    # Cambio realizado: Especificación del source de la capa manzanas, denominado manzanasSrc
+    manzanasSrc:
+        type: GeoJSON
+    #url: data/school-districts-polygon.geojson
+        url: data/MZ_BOGOTA.json
+
     # schools:
     #     type: GeoJSON
     #     url: data/school-districts-polygon.geojson
@@ -211,6 +223,18 @@ sources:
     #     type: TopoJSON
     #     url: https://gist.githubusercontent.com/mbostock/4090846/raw/c899e3d4f3353924e495667c842f54a07090cfab/us.json
 
+    # Fecha actualizado: 30/11/2015
+    # Cambio realizado: Colocar la capa manzanas
+    # Fecha actualizado: 01/12/2015
+    # Cambio realizado: Establecer color de las manzanas a color "#FFDF80" => Durazno
+    # Fecha actualizado: 01/12/2015
+    # Cambio realizado: Establecer el orden de carga de la capa "100" => "5"
+    # Fecha actualizado: 01/12/2015
+    # Cambio realizado: Establecer título para los labels de la capa => "Manzana Ciudad"
+    # Fecha actualizado: 01/12/2015
+    # Cambio realizado: Establecer color de las manzanas a color "#F9B355" => Naranja; "#79CC8A" => Verde; "#9b194d" => Morado-Fucsia.
+    # Fecha actualizado: 01/12/2015
+    # Cambio realizado: Cambio de modo de visualización lines => polygons para la capa manzanas
 layers:
 
     earth:
@@ -604,7 +628,23 @@ layers:
                         family: Helvetica
                         size: 12px
                         fill: black
-
+    manzanas:
+        data: { source: manzanasSrc }
+        draw:
+            #lines:
+            polygons:
+                #order: 100
+                order: 5
+                color: '#9b194d'
+                #width: [[7, .5px], [9, 1px], [14, 5px]]
+                interactive: true
+            text:
+                text_source: Manzana Ciudad
+                font:
+                    fill: white
+                    family: Futura
+                    size: 16px
+                    stroke: { color: black, width: 4 }
     # building_labels:
     #     data: { source: osm, layer: buildings }
     #     filter:

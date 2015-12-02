@@ -18,17 +18,23 @@ Enjoy!
 
 */
 
+/* Control de cambios
+Fecha actualizado: 30/11/2015
+Cambio realizado: Actualización de la llave API componente vector-tiles*/
+
 (function () {
     'use strict';
 
     var tile_sources = {
         'mapzen': {
             type: 'MVT',
-            url: 'https://vector.mapzen.com/osm/all/{z}/{x}/{y}.mvt?api_key=vector-tiles-HqUVidw'
+            //url: 'https://vector.mapzen.com/osm/all/{z}/{x}/{y}.mvt?api_key=vector-tiles-HqUVidw'
+            url: 'https://vector.mapzen.com/osm/all/{z}/{x}/{y}.mvt?api_key=vector-tiles-PNP2Dn4'
         },
         'mapzen-geojson': {
             type: 'GeoJSON',
-            url: 'https://vector.mapzen.com/osm/all/{z}/{x}/{y}.json?api_key=vector-tiles-HqUVidw'//,
+            //url: 'https://vector.mapzen.com/osm/all/{z}/{x}/{y}.json?api_key=vector-tiles-HqUVidw'//,
+            url: 'https://vector.mapzen.com/osm/all/{z}/{x}/{y}.json?api_key=vector-tiles-PNP2Dn4'
             // transform: function(data) {
             //     // You can edit the tile data here before it gets projected
             //     // and rendered
@@ -41,15 +47,18 @@ Enjoy!
         },
         'mapzen-dev': {
             type: 'GeoJSON',
-            url: 'https://vector.dev.mapzen.com/osm/all/{z}/{x}/{y}.json?api_key=vector-tiles-HqUVidw'
+            //url: 'https://vector.dev.mapzen.com/osm/all/{z}/{x}/{y}.json?api_key=vector-tiles-HqUVidw'
+            url: 'https://vector.dev.mapzen.com/osm/all/{z}/{x}/{y}.json?api_key=vector-tiles-PNP2Dn4'
         },
         'mapzen-local': {
             type: 'GeoJSON',
-            url: '//localhost:8080/all/{z}/{x}/{y}.json?api_key=vector-tiles-HqUVidw'
+            //url: '//localhost:8080/all/{z}/{x}/{y}.json?api_key=vector-tiles-HqUVidw'
+            url: '//localhost:8080/all/{z}/{x}/{y}.json?api_key=vector-tiles-PNP2Dn4'
         },
         'mapzen-topojson': {
             type: 'TopoJSON',
-            url: 'https://vector.mapzen.com/osm/all/{z}/{x}/{y}.topojson?api_key=vector-tiles-HqUVidw'
+            //url: 'https://vector.mapzen.com/osm/all/{z}/{x}/{y}.topojson?api_key=vector-tiles-HqUVidw'
+            url: 'https://vector.mapzen.com/osm/all/{z}/{x}/{y}.topojson?api_key=vector-tiles-PNP2Dn4'
         },
 
         // 'osm': {
@@ -73,9 +82,7 @@ Enjoy!
     getValuesFromUrl();    
     
     // default source, can be overriden by URL
-    alert("Escena => "+scene_url);         
-    /*alert("Realizado para cargar el mapa");*/
-    //return false;
+    //alert("Escena => "+scene_url);
     var
         map = L.map('map', {
             maxZoom: 20,
@@ -126,12 +133,12 @@ Enjoy!
         if (url_hash.length >= 1 && tile_sources[url_hash[0]] != null) {
             default_tile_source = url_hash[0];
         }
-        alert("URL Length =>"+url_hash.length);
+        //alert("URL Length =>"+url_hash.length);
         // Get location from URL
         //map_start_location = [40.70531887544228, -74.00976419448853, 16]; // NYC
         //Colombia
         map_start_location = [4.647231, -74.095740, 15];
-
+        //alert("Coordenadas =>"+map_start_location);
         if (url_hash.length === 3) {
             map_start_location = url_hash.slice(0, 3);
         }
@@ -154,7 +161,7 @@ Enjoy!
             }
         }
     }
-    alert("Coordenadas =>"+map_start_location);
+    //alert("Coordenadas =>"+map_start_location);
     // Put current state on URL
     var update_url_throttle = 100;
     var update_url_timeout = null;
@@ -318,8 +325,7 @@ Enjoy!
                 }
             },
             'elevator': {
-                setup: function (style) {
-                    alert("Style Elevator =>"+style);
+                setup: function (style) {                    
 					scene.config.layers.buildings.extruded.draw.polygons.style = style;
                 }
             },

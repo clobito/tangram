@@ -1,24 +1,30 @@
 <!doctype html>
 <!--
 Tangram: real-time WebGL rendering for OpenStreetMap
-http://github.com/tangrams/tangram
-http://mapzen.com/tangram
+Fecha actualizado: 01/12/2015
+Cambio realizado: Cambio título del prototipo: Tangram: WebGL for OpenStreetMap => Prototipo Tangram: Mapa WebGL, para cumplimiento obligación 10.
+Fecha actualizado: 01/12/2015
+Cambio realizado: Descarga de librerias para dejar en el servidor Web. CSS: leaflet.css => /tangram/mapa1/demos/css; JS: leaflet.js => /tangram/mapa1/demos/leaflet.js
+FUENTE: http://github.com/tangrams/tangram; http://mapzen.com/tangram
+
 -->
 <html lang="en-us">
   <head>
     <meta charset="utf-8">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Tangram: WebGL for OpenStreetMap</title>
+    <title>Prototipo Tangram: Mapa WebGL</title>
     <link rel="stylesheet" href="demos/css/main.css" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.0.0-beta.2/leaflet.css" />
+    <!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.0.0-beta.2/leaflet.css" />-->
+    <link rel="stylesheet" href="demos/css/leaflet.css"/>
   </head>
 
   <body>
     <div id="map"></div>
 
     <!-- Use leaflet 0.7.x (continuous zoom will be disabled) -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.3/leaflet.js"></script> 
+    <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.3/leaflet.js"></script>-->
+     <script src="demos/leaflet.js"></script>
 
     <!-- Use leaflet 1.x (continuous zoom will be enabled) -->
      <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.0.0-beta.2/leaflet.js"></script>-->
