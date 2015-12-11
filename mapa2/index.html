@@ -1,0 +1,74 @@
+<!doctype html>
+<!--
+Tangram: real-time WebGL rendering for OpenStreetMap
+Fecha actualizado: 01/12/2015
+Cambio realizado: Cambio título del prototipo: Tangram: WebGL for OpenStreetMap => Prototipo Tangram: Mapa WebGL, para cumplimiento obligación 10.
+Fecha actualizado: 01/12/2015
+Cambio realizado: Descarga de librerias para dejar en el servidor Web. CSS: leaflet.css => /tangram/mapa1/demos/css; JS: leaflet.js => /tangram/mapa1/demos/leaflet.js
+FUENTE: http://github.com/tangrams/tangram; http://mapzen.com/tangram
+
+-->
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Prototipo Tangram: Mapa WebGL</title>
+    <link rel="stylesheet" href="demos/css/main.css" />
+    <!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.0.0-beta.2/leaflet.css" />-->
+    <link rel="stylesheet" href="demos/css/leaflet.css"/>
+  </head>
+
+  <body>
+    <div id="map"></div>
+
+    <!-- Use leaflet 0.7.x (continuous zoom will be disabled) -->
+    <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.3/leaflet.js"></script>-->
+     <script src="demos/leaflet.js"></script>
+
+    <!-- Use leaflet 1.x (continuous zoom will be enabled) -->
+     <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.0.0-beta.2/leaflet.js"></script>-->
+
+    <!-- A lightweight graphical user interface for changing variables in JavaScript.  -->
+    <script src="demos/lib/dat.gui.min.js"></script>
+
+    <!-- rStats provides WebGL performance profiling-->
+    <script src="demos/lib/rStats.js"></script>
+    <script src="demos/lib/rStats.extras.js"></script>
+
+    <!-- FileSaver.js implements the HTML5 W3C saveAs(), used in the demo to save screenshots -->
+    <script src="demos/lib/FileSaver.js"></script>
+
+    <!-- Keymaster handles keyboard input -->
+    <script src="demos/lib/keymaster.js"></script>
+
+    <!-- Main tangram library -->
+    <script src="dist/tangram.debug.js"></script>
+
+    <!-- Tangram demo code -->
+    <script src="demos/main.js"></script>
+
+    <!-- Adding a script block to post message to the parent container (think iframed demos) -->
+    <script type="text/javascript">
+      window.addEventListener("hashchange",function(){parent.postMessage(window.location.hash, "*")});
+    </script>
+
+    <!-- Mapzen map UI - Fix protocol-->
+    <!--<script src='//s3.amazonaws.com/assets-staging.mapzen.com/ui/mapzen-ui.min.js'></script>
+    <script src='https://s3.amazonaws.com/assets-staging.mapzen.com/ui/mapzen-ui.min.js'></script>-->
+    <!-- Mapzen map UI Local -->
+    <script language="javascript1.2" src="src/mapzen-ui.min.js"></script>
+
+    <script>        
+      MPZN.bug({
+        name: 'Tangram',
+        link: 'https://mapzen.com/projects/tangram',
+        tweet: 'Tangram: real-time WebGL maps from @mapzen',
+        repo: 'https://github.com/tangrams/tangram'
+      });
+      //alert("Welcome");
+    </script>
+
+  </body>
+
+</html>
