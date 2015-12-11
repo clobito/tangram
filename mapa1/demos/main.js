@@ -20,7 +20,10 @@ Enjoy!
 
 /* Control de cambios
 Fecha actualizado: 30/11/2015
-Cambio realizado: Actualización de la llave API componente vector-tiles*/
+Cambio realizado: Actualización de la llave API componente vector-tiles
+Fecha actualizado: 09/12/2015
+Cambio realizado: Actualización del Zoom a 22x
+*/
 
 (function () {
     'use strict';
@@ -85,7 +88,8 @@ Cambio realizado: Actualización de la llave API componente vector-tiles*/
     //alert("Escena => "+scene_url);
     var
         map = L.map('map', {
-            maxZoom: 20,
+            //maxZoom: 20,
+            maxZoom: 22,
             trackResize: true,
             keyboard: false
         }),
@@ -133,7 +137,7 @@ Cambio realizado: Actualización de la llave API componente vector-tiles*/
         if (url_hash.length >= 1 && tile_sources[url_hash[0]] != null) {
             default_tile_source = url_hash[0];
         }
-        //alert("URL Length =>"+url_hash.length);
+        //alert("URL Length =>"+url_hash.length);        
         // Get location from URL
         //map_start_location = [40.70531887544228, -74.00976419448853, 16]; // NYC
         //Colombia
@@ -185,7 +189,7 @@ Cambio realizado: Actualización de la llave API componente vector-tiles*/
     }
 
     /*** Map ***/
-
+    alert("Layer =>"+layer);
     window.layer = layer;
     window.map = map;
     var scene = layer.scene;
@@ -508,7 +512,7 @@ Cambio realizado: Actualización de la llave API componente vector-tiles*/
                 }
                 var feature = selection.feature;
                 if (feature != null) {
-                    var label = '';
+                    var label = '';                   
                     if (feature.properties.name != null) {
                         label = feature.properties.name;
                     }
@@ -592,7 +596,7 @@ Cambio realizado: Actualización de la llave API componente vector-tiles*/
 
             initFeatureSelection();
         });        
-        layer.addTo(map);       
+        layer.addTo(map);
 
         if (osm_debug == true) {
             window.osm_layer =

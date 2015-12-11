@@ -215,16 +215,19 @@ sources:
         type: GeoJSON
     #url: data/school-districts-polygon.geojson
         url: data/MZ_BOGOTA.json
+    # Fecha actualizado: 02/12/2015
+    # Cambio realizado: Especificación del source de la capa volumenConstrucciones, denominado volumenConstruccionesSrc
+    volumenConstruccionesSrc:
+        type: GeoJSON
+        url: data/Edifica_Barrios_unidos_Bta.json
 
-    # schools:
-    #     type: GeoJSON
-    #     url: data/school-districts-polygon.geojson
     # counties:
     #     type: TopoJSON
     #     url: https://gist.githubusercontent.com/mbostock/4090846/raw/c899e3d4f3353924e495667c842f54a07090cfab/us.json
 
+    # Descripción: Sección de capas. 
     # Fecha actualizado: 30/11/2015
-    # Cambio realizado: Colocar la capa manzanas
+    # Cambio realizado: Colocar la capa manzanas con el fin de visualizar las manzanas de la ciudad de Bogotá D.C, país: Colombia
     # Fecha actualizado: 01/12/2015
     # Cambio realizado: Establecer color de las manzanas a color "#FFDF80" => Durazno
     # Fecha actualizado: 01/12/2015
@@ -235,6 +238,10 @@ sources:
     # Cambio realizado: Establecer color de las manzanas a color "#F9B355" => Naranja; "#79CC8A" => Verde; "#9b194d" => Morado-Fucsia.
     # Fecha actualizado: 01/12/2015
     # Cambio realizado: Cambio de modo de visualización lines => polygons para la capa manzanas
+    # Fecha actualizado: 02/12/2015
+    # Cambio realizado: Colocar la capa volumenConstrucciones, con color "#79CC8A" => Verde, correspondiente a la localidad Barrios Unidos. Especificación del filtro para la variable NRO_PISOS >= 0
+    # Fecha actualizado: 09/12/2015
+    # Cambio realizado: Actualizar la capa, para pintar las alturas, empleando el parámetro extruded y estilo "Window"
 layers:
 
     earth:
@@ -645,6 +652,35 @@ layers:
                     family: Futura
                     size: 16px
                     stroke: { color: black, width: 4 }
+    volumenConstrucciones:
+        data: { source: volumenConstruccionesSrc }
+        filter: function() { return feature.NRO_PISOS >= 0; }
+        draw:
+            polygons:
+                order: 6
+                color: '#79CC8A'
+                interactive: true
+                style: elevator
+            text:
+                #text_source: Edificio
+                font:
+                    fill: black
+                    family: Futura
+                    size: 18px
+                    stroke: { color: orange, width: 4 }
+        shaders:
+            blocks:
+                #color: |
+                    #color.rgb = vec3(min((v_world_position.z*.0005 + .65),.8));
+                color: '#79CC8A'
+        extruded:
+            #filter: { $zoom: { min: 15 } }
+            filter: { $zoom: { min: 5 } }
+            draw:
+                polygons:
+                    #style: buildings
+                    style: windows
+                    extrude: function () { return feature.NRO_PISOS > 0; }
     # building_labels:
     #     data: { source: osm, layer: buildings }
     #     filter:
