@@ -242,10 +242,10 @@ sources:
     # Cambio realizado: Colocar la capa volumenConstrucciones, con color "#79CC8A" => Verde, correspondiente a la localidad Barrios Unidos. Especificación del filtro para la variable NRO_PISOS >= 0
     # Fecha actualizado: 09/12/2015
     # Cambio realizado: Actualizar la capa, para pintar las alturas, empleando el parámetro extruded y estilo "Window"
-    # Fecha actualizado: 10/12/2015
+    # Fecha actualizado: 10/12/2015, 14/12/2015
     # Cambio realizado: Visualizar la altura sobre cada edificio, y su información respectiva.
-    # Fecha actualizado: 10/12/2015
-    # Cambio realizado: Implementar subcapa que muestra el color de la parte superior de las edificaciones
+    # Fecha actualizado: 10/12/2015, 11/12/2015
+    # Cambio realizado: Implementar subcapa que muestra el color de la parte superior de las edificaciones. Color => Rojo Beige (#C1876B) (FUENTE: http://ralcolores.mrket.net/index.php?index=HEX_DOWN)
 layers:
 
     earth:
@@ -667,8 +667,8 @@ layers:
                 interactive: true
                 style: none
                 heigth: function() { return feature.NRO_PISOS; }
-                outline: 
-                        color: '#79CC8A'
+                #outline: 
+                    #color: '#79CC8A'
             text:
                 #text_source: Edificio
                 text_source: function() { if ((feature.NRO_PISOS >= 0))
@@ -680,30 +680,33 @@ layers:
                     family: Arial
                     size: 10px
                     #stroke: { color: orange, width: 4 }
-        sublayer:
-            draw:
-                polygons:
-                    order: 6
-                    color: '#79CC8A'
-                    interactive: true
-        shaders:
-            blocks:
+        #sublayer:
+            #draw:
+                #polygons:
+                    #order: 6
+                    #color: '#79CC8A'
+                    #interactive: true
+                    #height: function() { return feature.NRO_PISOS; }
+        #shaders:
+            #blocks:
                 #color: 
                     #color.rgb = vec3(min((v_world_position.z*.0005 + .65),.8));
-                color: '#79CC8A'
+                #color: '#79CC8A'
         extruded:
             #filter: { $zoom: { min: 15 } }
             filter: { $zoom: { min: 5 } }
             draw:                
-                polygons:
+               polygons:
                     #style: buildings
-                    style: elevator
-                    extrude: function () { if (feature.NRO_PISOS > 0){return feature.NRO_PISOS > 0; }}
+                    style: elevator                    
+                    #extrude: function () { if (feature.NRO_PISOS > 0){return feature.NRO_PISOS > 0; }}
+                    #Fecha actualizado: 14/12/2015
+                    extrude: function () { if (feature.NRO_PISOS > 0){return feature.NRO_PISOS; }}
                     height: function() { return feature.NRO_PISOS; }
                     #Ensayo - 10Dic2015
                     #color: '#FFEA6F'                    
-                    #color: '#999999'
-                    color: ['153','153','153']
+                    color: '#C1876B'
+                    #color: ['153','153','153']
     # building_labels:
     #     data: { source: osm, layer: buildings }
     #     filter:
