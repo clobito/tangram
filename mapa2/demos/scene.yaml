@@ -211,16 +211,22 @@ sources:
     #     #     }
     # Fecha actualizado: 30/11/2015
     # Cambio realizado: Especificación del source de la capa manzanas, denominado manzanasSrc
-    manzanasSrc:
-        type: GeoJSON
+    # Fecha actualizado: 15/12/2015
+    # Cambio realizado: Desactivar el cargue de manzanas.
+    #manzanasSrc:
+        #type: GeoJSON
     #url: data/school-districts-polygon.geojson
-        url: data/MZ_BOGOTA.json
+        #url: data/MZ_BOGOTA.json
     # Fecha actualizado: 02/12/2015
     # Cambio realizado: Especificación del source de la capa volumenConstrucciones, denominado volumenConstruccionesSrc
     volumenConstruccionesSrc:
         type: GeoJSON
         url: data/Edifica_Barrios_unidos_Bta.json
-
+    # Fecha actualizado: 15/12/2015
+    # Cambio realizado: Especificación del source de la capa vihope, denominado vihopeSrc
+    vihopeSrc:
+        type: GeoJSON
+        url: data/BOGOTA_MZ_VIHOPE2005.json
     # counties:
     #     type: TopoJSON
     #     url: https://gist.githubusercontent.com/mbostock/4090846/raw/c899e3d4f3353924e495667c842f54a07090cfab/us.json
@@ -246,6 +252,8 @@ sources:
     # Cambio realizado: Visualizar la altura sobre cada edificio, y su información respectiva.
     # Fecha actualizado: 10/12/2015, 11/12/2015
     # Cambio realizado: Implementar subcapa que muestra el color de la parte superior de las edificaciones. Color => Rojo Beige (#C1876B) (FUENTE: http://ralcolores.mrket.net/index.php?index=HEX_DOWN)
+    # Fecha actualizado: 15/12/2015
+    # Cambio realizado: Crear capa denominada vihope, que lleva la información de Vivienda, Hogares y Personas
 layers:
 
     earth:
@@ -639,24 +647,24 @@ layers:
                         family: Helvetica
                         size: 12px
                         fill: black
-    manzanas:
-        data: { source: manzanasSrc }
-        draw:
+    #manzanas:
+        #data: { source: manzanasSrc }
+        #draw:
             #lines:
-            polygons:
+            #polygons:
                 #order: 100
-                order: 5
-                color: '#9b194d'
+                #order: 5
+                #color: '#9b194d'
                 #width: [[7, .5px], [9, 1px], [14, 5px]]
-                interactive: true
-                visible: false
-            text:
-                text_source: 'Manzana Ciudad'
-                font:
-                    fill: white
-                    family: Futura
-                    size: 16px
-                    stroke: { color: black, width: 4 }
+                #interactive: true
+                #visible: false
+            #text:
+                #text_source: 'Manzana Ciudad'
+                #font:
+                    #fill: white
+                    #family: Futura
+                    #size: 16px
+                    #stroke: { color: black, width: 4 }
     volumenConstrucciones:
         data: { source: volumenConstruccionesSrc }
         filter: function() { return feature.NRO_PISOS >= 0; }
@@ -707,6 +715,15 @@ layers:
                     #color: '#FFEA6F'                    
                     color: '#C1876B'
                     #color: ['153','153','153']
+    vihope:
+        data: { source: vihopeSrc }
+        draw:
+            polygons:
+                order: 6
+                color: '#AED1FF'
+                #color: ['','','','']
+                interactive: true
+                visible: true            
     # building_labels:
     #     data: { source: osm, layer: buildings }
     #     filter:

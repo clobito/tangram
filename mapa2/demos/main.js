@@ -472,6 +472,11 @@ Cambio realizado: Actualización del Zoom a 22x
 
         // Link to edit in OSM - hold 'e' and click
         window.addEventListener('click', function () {
+        /*Fecha actualizado: 15/12/2015
+        Cambio realizado: Implementación del cargue de información sobre la capa de manzana. Información: Total Vivienda, Total Hogar, Total Personas Hogar.
+        Autor: DANE
+        FUENTE: http://labs.abeautifulsite.net/archived/jquery-alerts/demo/*/
+        
             // if (key.isPressed('e')) {
             if (key.shift) {
                 var url = 'https://www.openstreetmap.org/edit?';
@@ -482,9 +487,24 @@ Cambio realizado: Actualización del Zoom a 22x
 
                 if (scene.center) {
                     url += '#map=' + scene.baseZoom(scene.zoom) + '/' + scene.center.lat + '/' + scene.center.lng;
-                }
+                }                               
                 window.open(url, '_blank');
             }
+            //Cuando se realice Control + click sobre la región, presentar la información en una ventana auxiliar, tipo jAlert
+            //Fecha: 15/12/2015
+            else if (key.ctrl)
+            {
+                var infoCapa = scene.camera.scene.selection.feature.properties;                
+                //alert("Ensayo =>"+infoCapa.FID+","+infoCapa.TOT_HOG);
+                if (infoCapa.FID != undefined)
+                {
+                    jAlert("Total Vivienda:"+infoCapa.TOT_VIV+"\n"+"Total Hogares:"+infoCapa.TOT_HOG+"\n"+"Total personas en el hogar:"+infoCapa.TOT_PERHOG,"Información Segmento"+" "+infoCapa.FID);
+                }
+                else
+                {
+                    jAlert("No existe información del segmento","Alerta");
+                }
+            }         
         });
     }
 

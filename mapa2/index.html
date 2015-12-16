@@ -5,6 +5,8 @@ Fecha actualizado: 01/12/2015
 Cambio realizado: Cambio título del prototipo: Tangram: WebGL for OpenStreetMap => Prototipo Tangram: Mapa WebGL, para cumplimiento obligación 10.
 Fecha actualizado: 01/12/2015
 Cambio realizado: Descarga de librerias para dejar en el servidor Web. CSS: leaflet.css => /tangram/mapa1/demos/css; JS: leaflet.js => /tangram/mapa1/demos/leaflet.js
+Fecha actualizado: 15/12/2015
+Cambio realizado: Inclusión de las librerias jquery.min.js y jquery.alerts.js; estilo jquery.alerts.css
 FUENTE: http://github.com/tangrams/tangram; http://mapzen.com/tangram
 
 -->
@@ -17,14 +19,22 @@ FUENTE: http://github.com/tangrams/tangram; http://mapzen.com/tangram
     <link rel="stylesheet" href="demos/css/main.css" />
     <!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.0.0-beta.2/leaflet.css" />-->
     <link rel="stylesheet" href="demos/css/leaflet.css"/>
+    <!-- Estilo jquery.alerts.css-->
+    <link rel="stylesheet" href="demos/css/jquery.alerts.css"/>
   </head>
 
   <body>
     <div id="map"></div>
 
+    <!-- include jquery.min.js-->
+    <script src="src/jquery-1.2.6.min.js"></script>
+    <!-- include jquery.ui.draggable.js -->
+    <script src="src/jquery.ui.draggable.js"></script>
+    <!-- include jquery.alerts.js -->
+    <script src="src/jquery.alerts.js"></script>
     <!-- Use leaflet 0.7.x (continuous zoom will be disabled) -->
     <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.3/leaflet.js"></script>-->
-     <script src="demos/leaflet.js"></script>
+    <script src="demos/leaflet.js"></script>
 
     <!-- Use leaflet 1.x (continuous zoom will be enabled) -->
      <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.0.0-beta.2/leaflet.js"></script>-->
