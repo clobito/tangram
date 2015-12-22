@@ -56,23 +56,24 @@ textures:
             info: [0, 1110, 32, 32]
             hotel: [0, 259, 32, 32]
             bookstore: [0, 333, 32, 32]
-
+# Fecha actualizado: 21/12/2015
+# Cambio realizado: Apagar los efectos de animación del estilo water, desactivar el color del shaders
 styles:
     water:
         base: polygons
-        animated: true
+        animated: false
         shaders:
             defines:
-                EFFECT_NOISE_ANIMATED: true
-            blocks:
-                global:
-                    url: shaders/glsl-noise-periodic-3d.glsl
-                color: |
-                    color.rgb *=
-                        abs(pnoise(
-                            (v_world_position.xyz + vec3(u_time * 5., u_time * 7.5, u_time * 10.)) / 10.0,
-                            vec3(TANGRAM_WORLD_POSITION_WRAP / 10.0))
-                        ) / 4. + .75;
+                EFFECT_NOISE_ANIMATED: false
+            #blocks:
+                #global:
+                    #url: shaders/glsl-noise-periodic-3d.glsl
+                #color: |
+                    #color.rgb *=
+                        #abs(pnoise(
+                            #(v_world_position.xyz + vec3(u_time * 5., u_time * 7.5, u_time * 10.)) / 10.0,
+                            #vec3(TANGRAM_WORLD_POSITION_WRAP / 10.0))
+                        #) / 4. + .75;
 
     rainbow:
         base: polygons
@@ -219,14 +220,24 @@ sources:
         #url: data/MZ_BOGOTA.json
     # Fecha actualizado: 02/12/2015
     # Cambio realizado: Especificación del source de la capa volumenConstrucciones, denominado volumenConstruccionesSrc
-    volumenConstruccionesSrc:
-        type: GeoJSON
-        url: data/Edifica_Barrios_unidos_Bta.json
+    # Fecha actualizado: 16/12/2015
+    # Cambio realizado: Desactivar el cargue de Edificaciones de Barrios Unidos.
+    #volumenConstruccionesSrc:
+        #type: GeoJSON
+        #url: data/Edifica_Barrios_unidos_Bta.json
     # Fecha actualizado: 15/12/2015
     # Cambio realizado: Especificación del source de la capa vihope, denominado vihopeSrc
-    vihopeSrc:
+    # Fecha actualizado: 18/12/2015
+    # Cambio realizado: Desactivar carga vihope.
+    #vihopeSrc:
+        #type: GeoJSON
+        #url: data/BOGOTA_MZ_VIHOPE2005.json
+    # Fecha actualizado: 18/12/2015
+    # Cambio realizado: Cargue del source que representa la capa vihope con manzanas separadas
+
+    vihopeSrc: 
         type: GeoJSON
-        url: data/BOGOTA_MZ_VIHOPE2005.json
+        url: data/BOGOTA_MZ_VIHOPE2005_VERSION_2.json
     # counties:
     #     type: TopoJSON
     #     url: https://gist.githubusercontent.com/mbostock/4090846/raw/c899e3d4f3353924e495667c842f54a07090cfab/us.json
@@ -254,6 +265,10 @@ sources:
     # Cambio realizado: Implementar subcapa que muestra el color de la parte superior de las edificaciones. Color => Rojo Beige (#C1876B) (FUENTE: http://ralcolores.mrket.net/index.php?index=HEX_DOWN)
     # Fecha actualizado: 15/12/2015
     # Cambio realizado: Crear capa denominada vihope, que lleva la información de Vivienda, Hogares y Personas
+    # Fecha actualizado: 16/12/2015
+    # Cambio realizado: Cambio capa vihope => Viviendas: color Rojo-Beige. Creación capa Hogares: color Naranja. Creación capa PersonasHogar.
+    # Fecha actualizado: 17/12/2015
+    # Cambio realizado: Definir color al texto para la capa PersonasHogar: Rojo => #FF001C
 layers:
 
     earth:
@@ -665,28 +680,28 @@ layers:
                     #family: Futura
                     #size: 16px
                     #stroke: { color: black, width: 4 }
-    volumenConstrucciones:
-        data: { source: volumenConstruccionesSrc }
-        filter: function() { return feature.NRO_PISOS >= 0; }
-        draw:
-            polygons:
-                order: 7
-                color: '#79CC8A'                
-                interactive: true
-                style: none
-                heigth: function() { return feature.NRO_PISOS; }
+    #volumenConstrucciones:
+        #data: { source: volumenConstruccionesSrc }
+        #filter: function() { return feature.NRO_PISOS >= 0; }
+        #draw:
+            #polygons:
+                #order: 7
+                #color: '#79CC8A'                
+                #interactive: true
+                #style: none
+                #heigth: function() { return feature.NRO_PISOS; }
                 #outline: 
                     #color: '#79CC8A'
-            text:
+            #text:
                 #text_source: Edificio
-                text_source: function() { if ((feature.NRO_PISOS >= 0))
-                                        {return 'Piso'+' '+feature.NRO_PISOS; }}
-                font:
+                #text_source: function() { if ((feature.NRO_PISOS >= 0))
+                                        # {return 'Piso'+' '+feature.NRO_PISOS; }}
+                #font:
                     #Cambio color de la fuente - 10/12/2015
-                    fill: '#9b194d'
+                    #fill: '#9b194d'
                     #family: Futura
-                    family: Arial
-                    size: 10px
+                    #family: Arial
+                    #size: 10px
                     #stroke: { color: orange, width: 4 }
         #sublayer:
             #draw:
@@ -700,30 +715,82 @@ layers:
                 #color: 
                     #color.rgb = vec3(min((v_world_position.z*.0005 + .65),.8));
                 #color: '#79CC8A'
-        extruded:
+        #extruded:
             #filter: { $zoom: { min: 15 } }
-            filter: { $zoom: { min: 5 } }
-            draw:                
-               polygons:
+            #filter: { $zoom: { min: 5 } }
+            #draw:                
+               #polygons:
                     #style: buildings
-                    style: elevator                    
+                    #style: elevator                    
                     #extrude: function () { if (feature.NRO_PISOS > 0){return feature.NRO_PISOS > 0; }}
                     #Fecha actualizado: 14/12/2015
-                    extrude: function () { if (feature.NRO_PISOS > 0){return feature.NRO_PISOS; }}
-                    height: function() { return feature.NRO_PISOS; }
+                    #extrude: function () { if (feature.NRO_PISOS > 0){return feature.NRO_PISOS; }}
+                    #height: function() { return feature.NRO_PISOS; }
                     #Ensayo - 10Dic2015
                     #color: '#FFEA6F'                    
-                    color: '#C1876B'
+                    #color: '#C1876B'
                     #color: ['153','153','153']
-    vihope:
+    Viviendas:
+        data: { source: vihopeSrc }
+        draw:
+            polygons:            
+                order: 6
+                color: '#79CC8A'
+                #color: ['','','','']
+                interactive: true
+                #visible: true
+            text:
+                text_source: function() { if (feature.TOT_VIV >= 0) {return 'Viviendas'+' '+feature.TOT_VIV; }}
+                font:
+                    fill: '#9b194d'
+                    family: Arial
+        extruded:
+            filter: { $zoom: { min: 5 } }
+            draw:
+                polygons:
+                    style: elevator
+                    extrude: function () { return feature.TOT_VIV; }
+                    color: '#C1876B'
+                    visible: true
+    Hogares:
+        data: { source: vihopeSrc }
+        draw:
+            polygons:             
+                order: 7
+                interactive: true                
+            text:
+                text_source: function() { if (feature.TOT_HOG >= 0) { return 'Hogares'+' '+feature.TOT_HOG; }}
+                font:
+                    fill: '#63a8de'
+                    family: Arial
+        extruded:
+            filter: { $zoom: { min: 5 } }
+            draw: 
+                polygons:
+                    style: elevator
+                    extrude: function () { return feature.TOT_HOG; }
+                    color: '#db9834'
+                    visible: true
+    PersonasHogar:
         data: { source: vihopeSrc }
         draw:
             polygons:
-                order: 6
-                color: '#AED1FF'
-                #color: ['','','','']
+                order: 8
                 interactive: true
-                visible: true            
+                #visible: false
+            text:
+                text_source: function() { if (feature.TOT_PERHOG >= 0) { return 'Personas por hogar'+' '+feature.TOT_PERHOG; }}
+                font:
+                    fill: '#FF001C'
+                    family: Arial
+        extruded:
+            filter: { $zoom: { min: 5 } }
+            draw: 
+                polygons:
+                    style: none
+                    extrude: function () { return feature.TOT_PERHOG; }
+                    color: '#999999'
+                    visible: true
     # building_labels:
     #     data: { source: osm, layer: buildings }
     #     filter:
