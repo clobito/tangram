@@ -23,6 +23,12 @@ Fecha actualizado: 30/11/2015
 Cambio realizado: Actualización de la llave API componente vector-tiles
 Fecha actualizado: 09/12/2015
 Cambio realizado: Actualización del Zoom a 22x
+Fecha actualizado: 22/12/2015
+Cambio realizado: Ocultar la capa de redes sociales del prototipo.
+Fecha actualizado: 22/12/2015
+Cambio realizado: Ocultar el control de búsqueda de ciudades. 
+Fecha actualizado: 22/12/2015
+Cambio realizado: Aplicar colores a los controles combo: Cámara y Efectos
 */
 
 (function () {
@@ -80,8 +86,7 @@ Cambio realizado: Actualización del Zoom a 22x
     scene_url = 'demos/scene.yaml',
     //osm_debug = false,
     osm_debug = true,
-    rS, url_hash, map_start_location, url_ui, url_style;    
-
+    rS, url_hash, map_start_location, url_ui, url_style;        
     getValuesFromUrl();    
     
     // default source, can be overriden by URL
@@ -100,12 +105,17 @@ Cambio realizado: Actualización del Zoom a 22x
             postUpdate: postUpdate,
             // highDensityDisplay: false,
             logLevel: 'debug',
-            attribution: '<a href="https://mapzen.com/tangram" target="_blank">Tangram</a> | &copy; OSM contributors | <a href="https://mapzen.com/" target="_blank">Mapzen</a>'
+            //attribution: '<a href="https://mapzen.com/tangram" target="_blank">Tangram</a> | &copy; OSM contributors | <a href="https://mapzen.com/" target="_blank">Mapzen</a>'
+            attribution: '<a href="https://mapzen.com/tangram" target="_blank">Tangram</a> | &copy; OSM contributors | <a href="https://mapzen.com/" target="_blank">Mapzen</a><span title="Usar la combinación de teclas Control + Click izquierdo del mouse para visualizar información del segmento" style="cursor:pointer">| Información Segmento</span>'
         });
-
+        //Carga de la escena
     layer.scene.subscribe({
-        load: function (msg) {
+        load: function (msg) {            
             var config = msg.config;
+            //Ocultar controles - 22/12/2015
+            $('#mz-bug').hide();
+            $('#mz-citysearch').hide();
+            
             // If no source was set in scene definition, set one based on the URL
             if (!config.sources || !config.sources['osm']) {
                 config.sources = config.sources || {};
@@ -130,19 +140,20 @@ Cambio realizado: Actualización del Zoom a 22x
     // #[lat],[lng],[zoom]
     // #[source],[lat],[lng],[zoom]
     // #[source],[location name]
-    function getValuesFromUrl() {
-
-        url_hash = window.location.hash.slice(1, window.location.hash.length).split(',');                
+    function getValuesFromUrl() {        
+        url_hash = window.location.hash.slice(1, window.location.hash.length).split(',');
+       
         // Get tile source from URL
         if (url_hash.length >= 1 && tile_sources[url_hash[0]] != null) {
             default_tile_source = url_hash[0];
+
         }
         //alert("URL Length =>"+url_hash.length);        
         // Get location from URL
         //map_start_location = [40.70531887544228, -74.00976419448853, 16]; // NYC
         //Colombia
         map_start_location = [4.647231, -74.095740, 15];
-        //alert("Coordenadas =>"+map_start_location);
+        //alert("Coordenadas =>"+map_start_location);         
         if (url_hash.length === 3) {
             map_start_location = url_hash.slice(0, 3);
         }
@@ -162,14 +173,14 @@ Cambio realizado: Actualización del Zoom a 22x
                     url_style = (match && match.length > 1 && match[1]);
 
                 });
-            }
-        }
+            }           
+        }         
     }
     //alert("Coordenadas =>"+map_start_location);
     // Put current state on URL
     var update_url_throttle = 100;
     var update_url_timeout = null;
-    function updateURL() {
+    function updateURL() {        
         clearTimeout(update_url_timeout);
         update_url_timeout = setTimeout(function() {
             var center = map.getCenter();
@@ -181,15 +192,15 @@ Cambio realizado: Actualización del Zoom a 22x
 
             if (style_options && style_options.effect != '') {
                 url_options.push('style=' + style_options.effect);
-            }
+            }            
             
-            window.location.hash = url_options.join(',');
+            window.location.hash = url_options.join(',');            
             
         }, update_url_throttle);
     }
 
     /*** Map ***/
-    alert("Layer =>"+layer);
+    
     window.layer = layer;
     window.map = map;
     var scene = layer.scene;
@@ -242,20 +253,35 @@ Cambio realizado: Actualización del Zoom a 22x
 
     // GUI options for rendering style/effects
 	// Combo de estilos
-	//Definición de colores de la región => sección settings
+	/*Definición de colores de la región => sección settings
+    Fecha actualizado: 17/12/2015
+    Cambio realizado: Adicionar el estilo Plain, para dibujar las alturas de manera constante.
+    Fecha actualizado: 18/122015
+    Cambio realizado: Dejar mapa base visible al cargar => dejar desactivada la capa "earth" en el efecto "daneplain"
+    Fecha actualizado: 21/12/2015
+    Cambio realizado: Para la opción None, dejar la capa sin estilo, dibujándose la altura de manera constante (efecto danenone)
+    Fecha actualizado: 21/12/2015
+    Cambio realizado: Actualizar el cargue los efectos {None, Water animation, Plain}: Estilo plano de los edificios
+    Fecha actualizado: 22/12/2015
+    Cambio realizado: Dejar las capas {'None', 'Plain'}
+    Fecha actualizado: 22/12/2015
+    Cambio realizado: Cambio nombre capas {'None' => 'Ninguno', 'Plain' => 'Plano'}
+    */
+
     var style_options = {
         effect: url_style || '',
         options: {
-            'None': '',
-            'Water animation': 'water',
+            'Ninguno': 'danenone',
+            /*'Water animation': 'water',
             'Elevator': 'elevator',
             'Pop-up': 'popup',
             'Halftone': 'halftone',
             'Windows': 'windows',
             'Environment Map': 'envmap',
-            'Rainbow': 'rainbow'
+            'Rainbow': 'rainbow',*/
+            'Plano': 'daneplain'
         },
-        saveInitial: function() {
+        saveInitial: function() {            
             this.initial = { config: JSON.stringify(scene.config) };
         },
         setup: function (style) {           
@@ -266,7 +292,7 @@ Cambio realizado: Actualización del Zoom a 22x
             gui.removeFolder(this.folder);
 
             // Style-specific settings
-            if (style != '') {
+            if (style != '') {               
                 if (this.settings[style] != null) {
                     var settings = this.settings[style] || {};
 
@@ -293,8 +319,8 @@ Cambio realizado: Actualización del Zoom a 22x
                         }
                     }
                 }
-            }
-
+            }           
+             
             // Recompile/rebuild
             scene.updateConfig({ rebuild: true });            
             updateURL();
@@ -304,20 +330,42 @@ Cambio realizado: Actualización del Zoom a 22x
                 gui.__controllers[i].updateDisplay();
             }
         },
-        settings: {
+        settings: {            
             'water': {
                 setup: function (style) {
                     scene.config.layers.water.draw.polygons.style = style;
+                    //Estilo a las capas Viviendas, Hogares, PersonasHogar
+                    style = 'water';
+                    //style = 'windows';
+                    scene.config.layers.Viviendas.draw.polygons.style               =   style;
+                    scene.config.layers.Viviendas.extruded.draw.polygons.style      =   style;
+
+                    scene.config.layers.Hogares.draw.polygons.style                 =   style;
+                    scene.config.layers.Hogares.extruded.draw.polygons.style        =   style; 
+
+                    scene.config.layers.PersonasHogar.draw.polygons.style           =   style;
+                    scene.config.layers.PersonasHogar.extruded.draw.polygons.style  =   style;
+                    
+                    //Visibilidad capas: Dejar visible la capa Viviendas, las demás ocultas
+
+                    layer.scene.config.layers['Viviendas'].visible                  =   true;
+                    layer.scene.config.layers['Hogares'].visible                    =   false;
+                    layer.scene.config.layers['PersonasHogar'].visible              =   false;
+
+                    //Ocultar textos de las capas
+                    scene.config.layers.Viviendas.draw.text.visible                 =   false;
+                    scene.config.layers.Hogares.draw.text.visible                   =   false;
+                    scene.config.layers.PersonasHogar.draw.text.visible             =   false;
                 }
             },
             'rainbow': {
                 setup: function (style) {
                     //Personalizar color poligonos de manera dinàmica
-					//scene.config.layers.earth.draw.polygons.color = '#333';
-					scene.config.layers.earth.draw.polygons.color = '#1B008F';
-					//Personalizar color calles, carreras
+                    //scene.config.layers.earth.draw.polygons.color = '#333';
+                    scene.config.layers.earth.draw.polygons.color = '#1B008F';
+                    //Personalizar color calles, carreras
                     //scene.config.layers.roads.draw.lines.color = '#777';
-					scene.config.layers.roads.draw.lines.color = '#730016';
+                    scene.config.layers.roads.draw.lines.color = '#730016';
                     scene.config.layers.poi_icons.visible = false;
                     scene.config.layers.buildings.draw.polygons.style = style;
                     scene.config.layers.buildings.extruded.draw.polygons.style = style;
@@ -330,16 +378,16 @@ Cambio realizado: Actualización del Zoom a 22x
             },
             'elevator': {
                 setup: function (style) {                    
-					scene.config.layers.buildings.extruded.draw.polygons.style = style;
+                    scene.config.layers.buildings.extruded.draw.polygons.style = style;
                 }
             },
             'halftone': {
                 setup: function (style) {
                     
-					//scene.config.scene.background.color = 'black';
-					//scene.config.scene.background.color = '#E18B00';
-					
-					//Configuración de las capas
+                    //scene.config.scene.background.color = 'black';
+                    //scene.config.scene.background.color = '#E18B00';
+                    
+                    //Configuración de las capas
                     var layers = scene.config.layers;
                     layers.earth.draw.polygons.style = 'halftone_polygons';
                     layers.water.draw.polygons.style = 'halftone_polygons';
@@ -392,6 +440,71 @@ Cambio realizado: Actualización del Zoom a 22x
                         scene.requestRedraw();
                     }.bind(this));
                 }
+            },
+            'daneplain':
+            {
+                setup: function (style)
+                {
+                    //Ocultar las demás capas
+                    scene.config.layers.earth.draw.polygons.visible                 =   false;
+                    scene.config.layers.landuse.draw.polygons.visible               =   false;
+                    scene.config.layers.water.draw.polygons.visible                 =   false;
+                    scene.config.layers.roads.draw.lines.visible                    =   false;
+                    scene.config.layers.buildings.draw.polygons.visible             =   false;
+                    scene.config.layers.road_labels.highway.draw.text.visible       =   false;
+                    scene.config.layers.road_labels.not_highway.draw.text.visible   =   false;
+                    /*scene.config.layers.poi_icons.draw.points.visible               =   false;*/                 
+                    //Estilo a las capas Viviendas, Hogares, PersonasHogar
+                    style = 'water';
+                    //style = 'windows';
+                    scene.config.layers.Viviendas.draw.polygons.style               =   style;
+                    scene.config.layers.Viviendas.extruded.draw.polygons.style      =   style;
+
+                    scene.config.layers.Hogares.draw.polygons.style                 =   style;
+                    scene.config.layers.Hogares.extruded.draw.polygons.style        =   style; 
+
+                    scene.config.layers.PersonasHogar.draw.polygons.style           =   style;
+                    scene.config.layers.PersonasHogar.extruded.draw.polygons.style  =   style;
+                    
+                    //Visibilidad capas: Dejar visible la capa Viviendas, las demás ocultas
+
+                    layer.scene.config.layers['Viviendas'].visible                  =   true;
+                    layer.scene.config.layers['Hogares'].visible                    =   false;
+                    layer.scene.config.layers['PersonasHogar'].visible              =   false;
+
+                    //Ocultar textos de las capas
+                    scene.config.layers.Viviendas.draw.text.visible                 =   false;
+                    scene.config.layers.Hogares.draw.text.visible                   =   false;
+                    scene.config.layers.PersonasHogar.draw.text.visible             =   false;
+                }
+            },
+            'danenone':
+            {
+               setup: function (style)
+               {
+                    style = 'water';
+                    //alert("Estilo =>"+style);
+                    scene.config.layers.Viviendas.draw.polygons.style               =   style;
+                    scene.config.layers.Viviendas.extruded.draw.polygons.style      =   style;
+
+                    scene.config.layers.Hogares.draw.polygons.style                 =   style;
+                    scene.config.layers.Hogares.extruded.draw.polygons.style        =   style; 
+
+                    scene.config.layers.PersonasHogar.draw.polygons.style           =   style;
+                    scene.config.layers.PersonasHogar.extruded.draw.polygons.style  =   style;
+
+                     //Visibilidad capas: Dejar visible la capa Viviendas, las demás ocultas
+
+                    layer.scene.config.layers['Viviendas'].visible                  =   true;
+                    layer.scene.config.layers['Hogares'].visible                    =   false;
+                    layer.scene.config.layers['PersonasHogar'].visible              =   false;
+
+                     //Ocultar textos de las capas
+                    scene.config.layers.Viviendas.draw.text.visible                 =   false;
+                    scene.config.layers.Hogares.draw.text.visible                   =   false;
+                    scene.config.layers.PersonasHogar.draw.text.visible             =   false;
+
+               } 
             }
         },
         scaleColor: function (c, factor) { // convenience for converting between uniforms (0-1) and DAT colors (0-255)
@@ -410,9 +523,23 @@ Cambio realizado: Actualización del Zoom a 22x
     // Create dat GUI
     var gui = new dat.GUI({ autoPlace: true });
     function addGUI () {
+        /* Propósito: Controles del Panel de control
+        Fecha Actualizado: 17/12/2015
+        Cambio realizado: Dejar activadas las capas Viviendas, Hogares, PersonasHogar, desactivando todas las demás.
+        Fecha Actualizado: 22/12/2015
+        Cambio realizado: Desactivar control feature_info
+        Fecha Actualizado: 22/12/2015
+        Cambio realizado: Cambiar labels del panel de control a idioma SPA {'camera' => 'Cámara', 'snapshoot' => 'Captura Imagen', 'Layers' => 'Capas', 'effect' => 'Efectos'}.
+        Fecha Actualizado: 22/12/2015
+        Cambio realizado: Cambio opciones combo Camara {'Flat' =>'Plano', 'Perspective' => 'Perspectiva', 'Isometric' => 'Isometrica'}
+        Fecha Actualizado: 22/12/2015
+        Cambio realizado: Visualizar las capas {'Viviendas','Hogares','PersonasHogar'}
+        Observaciones: Fuente de consulta: http://learningthreejs.com/blog/2011/08/14/dat-gui-simple-ui-for-demos/
+        */
+
         gui.domElement.parentNode.style.zIndex = 10000;
         window.gui = gui;
-
+               
         // Add ability to remove a whole folder from DAT.gui
         gui.removeFolder = function(name) {
             var folder = this.__folders[name];
@@ -427,50 +554,68 @@ Cambio realizado: Actualización del Zoom a 22x
         };       
         // Camera
         var camera_types = {
-            'Flat': 'flat',
-            'Perspective': 'perspective',
-            'Isometric': 'isometric'
+            'Plano': 'flat',
+            'Perspectiva': 'perspective',
+            'Isometrica': 'isometric'
         };
-        gui.camera = scene.getActiveCamera();
+        gui.camera = scene.getActiveCamera();        
         gui.add(gui, 'camera', camera_types).onChange(function(value) {
             scene.setActiveCamera(value);
             scene.updateConfig();
-        });
+        }).name('Cámara');
+
 
         // Feature selection on hover
+        
         gui['feature info'] = true;
-        gui.add(gui, 'feature info');
+        //gui.add(gui, 'feature info');
 
         // Screenshot
         gui.screenshot = function () {
             gui.queue_screenshot = true;
             scene.requestRedraw();
         };
-        gui.add(gui, 'screenshot');
+        gui.add(gui, 'screenshot').name('Captura Imagen');
+       
 
         // Layers
-        var layer_gui = gui.addFolder('Layers');
+        //var layer_gui = gui.addFolder('Layers');
+        var layer_gui = gui.addFolder('Capas');
         var layer_controls = {};
         Object.keys(layer.scene.config.layers).forEach(function(l) {
+            //alert("Capa (l)=>"+l);            
             if (!layer.scene.config.layers[l]) {
                 return;
             }
-
-            layer_controls[l] = !(layer.scene.config.layers[l].visible == false);
-            layer_gui.
-                add(layer_controls, l).
-                onChange(function(value) {
-                    layer.scene.config.layers[l].visible = value;
-                    layer.scene.rebuildGeometry();
-                });
+            //Activar solo las capas {'Viviendas','Hogares','PersonasHogar'}
+            if (l == 'Viviendas' || l == 'Hogares' || l == 'PersonasHogar')
+            {   
+                //Desactivar capas primarias, dejar activa la capa Viviendas
+                //layer_controls[l] = !(layer.scene.config.layers[l].visible == false);
+                layer_controls[l] = false;            
+                layer_controls['Viviendas']     =   true;            
+                //alert("Control capa =>"+layer_controls[l]);
+                layer_gui.
+                    add(layer_controls, l).
+                    onChange(function(value) { 
+                        //alert("Visible =>"+value);                   
+                        layer.scene.config.layers[l].visible = value;
+                        layer.scene.rebuildGeometry();
+                    });
+            }    
         });
 
         // Styles
         gui.add(style_options, 'effect', style_options.options).
-            onChange(style_options.setup.bind(style_options));
+            onChange(style_options.setup.bind(style_options)).name('Efectos');
 
         // Link to edit in OSM - hold 'e' and click
         window.addEventListener('click', function () {
+        /*Fecha actualizado: 15/12/2015
+        Cambio realizado: Implementación del cargue de información sobre la capa de manzana. Información: Total Vivienda, Total Hogar, Total Personas Hogar.
+        Autor: DANE
+        FUENTE: http://labs.abeautifulsite.net/archived/jquery-alerts/demo/*/
+        
             // if (key.isPressed('e')) {
             if (key.shift) {
                 var url = 'https://www.openstreetmap.org/edit?';
@@ -481,9 +626,24 @@ Cambio realizado: Actualización del Zoom a 22x
 
                 if (scene.center) {
                     url += '#map=' + scene.baseZoom(scene.zoom) + '/' + scene.center.lat + '/' + scene.center.lng;
-                }
+                }                               
                 window.open(url, '_blank');
             }
+            //Cuando se realice Control + click sobre la región, presentar la información en una ventana auxiliar, tipo jAlert
+            //Fecha: 15/12/2015
+            else if (key.ctrl)
+            {
+                var infoCapa = scene.camera.scene.selection.feature.properties;                
+                //alert("Ensayo =>"+infoCapa.FID+","+infoCapa.TOT_HOG);
+                if (infoCapa.FID != undefined)
+                {
+                    jAlert("Total Vivienda:"+infoCapa.TOT_VIV+"\n"+"Total Hogares:"+infoCapa.TOT_HOG+"\n"+"Total personas en el hogar:"+infoCapa.TOT_PERHOG,"Información Segmento"+" "+infoCapa.FID);
+                }
+                else
+                {
+                    jAlert("No existe información del segmento","Alerta");
+                }
+            }         
         });
     }
 
@@ -583,19 +743,26 @@ Cambio realizado: Actualización del Zoom a 22x
     }
 
     /***** Render loop *****/
-    window.addEventListener('load', function () {         
+    /*Fecha actualizado: 21/12/2015
+    Cambio realizado: Establecer por default el estilo a daneplain, para dar atención al requerimiento "Apagar efecto “Strude” al cambiar el efecto en el Panel de control, bajo opción Effect a none"    
+    */
+
+    window.addEventListener('load', function () {
+        url_style = 'daneplain';
         // Scene initialized
         layer.on('init', function() {            
-            addGUI();
-
+            addGUI();            
             style_options.saveInitial();
+            //alert("url_style =>"+url_style);
             if (url_style) {
                 style_options.setup(url_style);
             }
+
             updateURL();
 
             initFeatureSelection();
-        });        
+        });
+        
         layer.addTo(map);
 
         if (osm_debug == true) {
