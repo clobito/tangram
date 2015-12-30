@@ -29,6 +29,12 @@ Fecha actualizado: 22/12/2015
 Cambio realizado: Ocultar el control de búsqueda de ciudades. 
 Fecha actualizado: 22/12/2015
 Cambio realizado: Aplicar colores a los controles combo: Cámara y Efectos
+Fecha actualizado: 23/12/2015
+Cambio realizado: Adicionar logo Dane y Todos por un mismo país en la esquina inferior izquierda del mapa.
+Fecha actualizado: 28/12/2015
+Cambio realizado: Actualizar logo del geoportal, consultado desde http://geoportal.dane.gov.co/v2/?page=elementoMapaDane.
+Fecha actualizado: 28/12/2015
+Cambio realizado: Actualizar posición del logo a 0px desde la esquina inferior izquierda (bottom: 0px)
 */
 
 (function () {
@@ -114,7 +120,18 @@ Cambio realizado: Aplicar colores a los controles combo: Cámara y Efectos
             var config = msg.config;
             //Ocultar controles - 22/12/2015
             $('#mz-bug').hide();
-            $('#mz-citysearch').hide();
+            $('#mz-citysearch').hide();            
+            //Insertar imágen Dane - Equidad, todos por un mismo país en la capa de geoportalImg definido en la vista
+            //Caso 1. uso con With
+            //NOTA: Se desactiva, por error en el API de TANGRAM 
+            /*with ($('#geoportalImg'))
+            {
+                html('<img src="demos/images/matball01.jpg">');
+                attr('style','z-index: 2; position:absolute; bottom: -10px');
+            }*/
+            //Caso 2. Uso uno a uno
+            $('#geoportalImg').html('<img src="demos/images/geoportal.png">');
+            $('#geoportalImg').attr('style','z-index: 2; position:absolute; bottom: 0px; background-color: #fff');
             
             // If no source was set in scene definition, set one based on the URL
             if (!config.sources || !config.sources['osm']) {
@@ -181,17 +198,23 @@ Cambio realizado: Aplicar colores a los controles combo: Cámara y Efectos
     var update_url_throttle = 100;
     var update_url_timeout = null;
     function updateURL() {        
+        /*Fecha actualizado: 23/12/2015
+        Cambio realizado: Cargar por default la capa "Plano"*/
         clearTimeout(update_url_timeout);
         update_url_timeout = setTimeout(function() {
             var center = map.getCenter();
             var url_options = [default_tile_source, center.lat, center.lng, map.getZoom()];
-
+            
             if (rS) {
                 url_options.push('rstats');
             }
 
             if (style_options && style_options.effect != '') {
                 url_options.push('style=' + style_options.effect);
+            }
+            else
+            {
+                url_options.push('style=daneplain');
             }            
             
             window.location.hash = url_options.join(',');            
@@ -467,10 +490,14 @@ Cambio realizado: Aplicar colores a los controles combo: Cámara y Efectos
                     scene.config.layers.PersonasHogar.extruded.draw.polygons.style  =   style;
                     
                     //Visibilidad capas: Dejar visible la capa Viviendas, las demás ocultas
+                    //Desactivar, va de acuerdo al combo que activa o no las capas
 
-                    layer.scene.config.layers['Viviendas'].visible                  =   true;
+                   /* layer.scene.config.layers['Viviendas'].visible                  =   true;
                     layer.scene.config.layers['Hogares'].visible                    =   false;
-                    layer.scene.config.layers['PersonasHogar'].visible              =   false;
+                    layer.scene.config.layers['PersonasHogar'].visible              =   false;*/
+                    /*alert("Capa Vivienda =>"+scene.config.layers.Viviendas.extruded.draw.polygons.visible);
+                    alert("Capa Hogares =>"+scene.config.layers.Hogares.extruded.draw.polygons.visible);
+                    alert("Capa PersonasHogar =>"+scene.config.layers.PersonasHogar.extruded.draw.polygons.visible);*/
 
                     //Ocultar textos de las capas
                     scene.config.layers.Viviendas.draw.text.visible                 =   false;
@@ -492,12 +519,25 @@ Cambio realizado: Aplicar colores a los controles combo: Cámara y Efectos
 
                     scene.config.layers.PersonasHogar.draw.polygons.style           =   style;
                     scene.config.layers.PersonasHogar.extruded.draw.polygons.style  =   style;
+                    /*scene.config.layers['Viviendas'].draw.polygons.style               =   style;
+                    scene.config.layers['Viviendas'].extruded.draw.polygons.style      =   style;
 
+                    scene.config.layers['Hogares'].draw.polygons.style                 =   style;
+                    scene.config.layers['Hogares'].extruded.draw.polygons.style        =   style; 
+
+                    scene.config.layers['PersonasHogar'].draw.polygons.style           =   style;
+                    scene.config.layers['PersonasHogar'].extruded.draw.polygons.style  =   style;*/
+
+
+                    /*alert("Capa Vivienda =>"+scene.config.layers.Viviendas.extruded.draw.polygons.visible);
+                    alert("Capa Hogares =>"+scene.config.layers.Hogares.extruded.draw.polygons.visible);
+                    alert("Capa PersonasHogar =>"+scene.config.layers.PersonasHogar.extruded.draw.polygons.visible);*/
                      //Visibilidad capas: Dejar visible la capa Viviendas, las demás ocultas
+                     /*Actualización: No prender capa alguna, se determina de acuerdo a la capa que se activa*/
 
-                    layer.scene.config.layers['Viviendas'].visible                  =   true;
+                    /*layer.scene.config.layers['Viviendas'].visible                  =   true;
                     layer.scene.config.layers['Hogares'].visible                    =   false;
-                    layer.scene.config.layers['PersonasHogar'].visible              =   false;
+                    layer.scene.config.layers['PersonasHogar'].visible              =   false;*/
 
                      //Ocultar textos de las capas
                     scene.config.layers.Viviendas.draw.text.visible                 =   false;
@@ -533,7 +573,9 @@ Cambio realizado: Aplicar colores a los controles combo: Cámara y Efectos
         Fecha Actualizado: 22/12/2015
         Cambio realizado: Cambio opciones combo Camara {'Flat' =>'Plano', 'Perspective' => 'Perspectiva', 'Isometric' => 'Isometrica'}
         Fecha Actualizado: 22/12/2015
-        Cambio realizado: Visualizar las capas {'Viviendas','Hogares','PersonasHogar'}
+        Cambio realizado: Visualizar las capas {'Viviendas','Hogares','PersonasHogar'}        
+        Fecha Actualizado: 23/12/2015
+        Cambio realizado: Activar la capa, de acuerdo a la seleccionada en el Item Capas.         
         Observaciones: Fuente de consulta: http://learningthreejs.com/blog/2011/08/14/dat-gui-simple-ui-for-demos/
         */
 
@@ -592,16 +634,27 @@ Cambio realizado: Aplicar colores a los controles combo: Cámara y Efectos
             {   
                 //Desactivar capas primarias, dejar activa la capa Viviendas
                 //layer_controls[l] = !(layer.scene.config.layers[l].visible == false);
-                layer_controls[l] = false;            
-                layer_controls['Viviendas']     =   true;            
-                //alert("Control capa =>"+layer_controls[l]);
+                layer_controls[l] = false;
+                
+                //layer_controls['Viviendas']     =   true;
+                /*if (l == 'Viviendas')
+                {
+                    layer_controls[l] = true;
+                    scene.config.layers[l].extruded.draw.polygons.visible = true;
+                }
+                else
+                {
+                    layer_controls[l] = false;
+                }*/
+                //alert("Control capa =>"+layer_controls[l]);                
                 layer_gui.
                     add(layer_controls, l).
                     onChange(function(value) { 
-                        //alert("Visible =>"+value);                   
-                        layer.scene.config.layers[l].visible = value;
+                        //alert("Capa =>"+l+",Visible =>"+value);
+                        //layer.scene.config.layers[l].visible = value;
+                        scene.config.layers[l].extruded.draw.polygons.visible = value;
                         layer.scene.rebuildGeometry();
-                    });
+                    });                
             }    
         });
 
@@ -609,6 +662,7 @@ Cambio realizado: Aplicar colores a los controles combo: Cámara y Efectos
         gui.add(style_options, 'effect', style_options.options).
             onChange(style_options.setup.bind(style_options)).name('Efectos');
 
+        
         // Link to edit in OSM - hold 'e' and click
         window.addEventListener('click', function () {
         /*Fecha actualizado: 15/12/2015

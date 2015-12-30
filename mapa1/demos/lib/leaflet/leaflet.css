@@ -138,18 +138,20 @@
 
 
 /* zoom and fade animations */
-
+/* Pruebas - 28/12/2015
+Cambios: Opacity 0.2s => 2.0s; opacity: 0 => opacity: 6*/
 .leaflet-fade-anim .leaflet-tile,
 .leaflet-fade-anim .leaflet-popup {
-	opacity: 0;
-	-webkit-transition: opacity 0.2s linear;
-	   -moz-transition: opacity 0.2s linear;
-	     -o-transition: opacity 0.2s linear;
-	        transition: opacity 0.2s linear;
+	opacity: 6;
+	-webkit-transition: opacity 2.0s linear;
+	   -moz-transition: opacity 2.0s linear;
+	     -o-transition: opacity 2.0s linear;
+	        transition: opacity 2.0s linear;
 	}
+	/*Fecha act: 28/12/2015. Prueba "opacity:1" => "opacity:60"*/
 .leaflet-fade-anim .leaflet-tile-loaded,
 .leaflet-fade-anim .leaflet-map-pane .leaflet-popup {
-	opacity: 1;
+	opacity: 60;
 	}
 
 .leaflet-zoom-anim .leaflet-zoom-animated {

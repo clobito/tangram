@@ -1,5 +1,6 @@
 # include: transit.yaml
-
+# Fecha actualizado: 28/12/2015
+# Cambio realizado: Activar iluminación light1. Actualizar en profile direcional1, el atributo ambient 1.1 => 0.1; atributo diffuse 0.2 => 1.0
 cameras:
     perspective:
         type: perspective
@@ -20,16 +21,18 @@ lights:
     directional1:
         type: directional
         direction: [.1, .5, -1] #[0.1, 0.1, -1]
-        diffuse: .2
-        ambient: 1.1
-    #light1:
-        #visible: true
-        #type: point
-        #position: [-74.0170, 40.7031, 100]
-        #origin: world
-        #ambient: .3
-        #diffuse: 1
-        #specular: .2
+        #diffuse: .2
+        diffuse: 1.0
+        #ambient: 1.1
+        ambient: 0.1
+    light1:
+        visible: true
+        type: point
+        position: [-74.0170, 40.7031, 100]
+        origin: world
+        ambient: .3
+        diffuse: 1
+        specular: .2
 
 scene:
     background:
@@ -56,23 +59,24 @@ textures:
             info: [0, 1110, 32, 32]
             hotel: [0, 259, 32, 32]
             bookstore: [0, 333, 32, 32]
-
+# Fecha actualizado: 21/12/2015
+# Cambio realizado: Apagar los efectos de animación del estilo water, desactivar el color del shaders
 styles:
     water:
         base: polygons
-        animated: true
+        animated: false
         shaders:
             defines:
-                EFFECT_NOISE_ANIMATED: true
-            blocks:
-                global:
-                    url: shaders/glsl-noise-periodic-3d.glsl
-                color: |
-                    color.rgb *=
-                        abs(pnoise(
-                            (v_world_position.xyz + vec3(u_time * 5., u_time * 7.5, u_time * 10.)) / 10.0,
-                            vec3(TANGRAM_WORLD_POSITION_WRAP / 10.0))
-                        ) / 4. + .75;
+                EFFECT_NOISE_ANIMATED: false
+            #blocks:
+                #global:
+                    #url: shaders/glsl-noise-periodic-3d.glsl
+                #color: |
+                    #color.rgb *=
+                        #abs(pnoise(
+                            #(v_world_position.xyz + vec3(u_time * 5., u_time * 7.5, u_time * 10.)) / 10.0,
+                            #vec3(TANGRAM_WORLD_POSITION_WRAP / 10.0))
+                        #) / 4. + .75;
 
     rainbow:
         base: polygons
@@ -211,16 +215,32 @@ sources:
     #     #     }
     # Fecha actualizado: 30/11/2015
     # Cambio realizado: Especificación del source de la capa manzanas, denominado manzanasSrc
-    manzanasSrc:
-        type: GeoJSON
+    # Fecha actualizado: 15/12/2015
+    # Cambio realizado: Desactivar el cargue de manzanas.
+    #manzanasSrc:
+        #type: GeoJSON
     #url: data/school-districts-polygon.geojson
-        url: data/MZ_BOGOTA.json
+        #url: data/MZ_BOGOTA.json
     # Fecha actualizado: 02/12/2015
     # Cambio realizado: Especificación del source de la capa volumenConstrucciones, denominado volumenConstruccionesSrc
-    volumenConstruccionesSrc:
-        type: GeoJSON
-        url: data/Edifica_Barrios_unidos_Bta.json
+    # Fecha actualizado: 16/12/2015
+    # Cambio realizado: Desactivar el cargue de Edificaciones de Barrios Unidos.
+    #volumenConstruccionesSrc:
+        #type: GeoJSON
+        #url: data/Edifica_Barrios_unidos_Bta.json
+    # Fecha actualizado: 15/12/2015
+    # Cambio realizado: Especificación del source de la capa vihope, denominado vihopeSrc
+    # Fecha actualizado: 18/12/2015
+    # Cambio realizado: Desactivar carga vihope.
+    #vihopeSrc:
+        #type: GeoJSON
+        #url: data/BOGOTA_MZ_VIHOPE2005.json
+    # Fecha actualizado: 18/12/2015
+    # Cambio realizado: Cargue del source que representa la capa vihope con manzanas separadas
 
+    vihopeSrc: 
+        type: GeoJSON
+        url: data/BOGOTA_MZ_VIHOPE2005_VERSION_2.json
     # counties:
     #     type: TopoJSON
     #     url: https://gist.githubusercontent.com/mbostock/4090846/raw/c899e3d4f3353924e495667c842f54a07090cfab/us.json
@@ -242,6 +262,23 @@ sources:
     # Cambio realizado: Colocar la capa volumenConstrucciones, con color "#79CC8A" => Verde, correspondiente a la localidad Barrios Unidos. Especificación del filtro para la variable NRO_PISOS >= 0
     # Fecha actualizado: 09/12/2015
     # Cambio realizado: Actualizar la capa, para pintar las alturas, empleando el parámetro extruded y estilo "Window"
+    # Fecha actualizado: 10/12/2015, 14/12/2015
+    # Cambio realizado: Visualizar la altura sobre cada edificio, y su información respectiva.
+    # Fecha actualizado: 10/12/2015, 11/12/2015
+    # Cambio realizado: Implementar subcapa que muestra el color de la parte superior de las edificaciones. Color => Rojo Beige (#C1876B) (FUENTE: http://ralcolores.mrket.net/index.php?index=HEX_DOWN)
+    # Fecha actualizado: 15/12/2015
+    # Cambio realizado: Crear capa denominada vihope, que lleva la información de Vivienda, Hogares y Personas
+    # Fecha actualizado: 16/12/2015
+    # Cambio realizado: Cambio capa vihope => Viviendas: color Rojo-Beige. Creación capa Hogares: color Naranja. Creación capa PersonasHogar.
+    # Fecha actualizado: 17/12/2015
+    # Cambio realizado: Definir color al texto para la capa PersonasHogar: Rojo => #FF001C
+    # Fecha actualizado: 23/12/2015
+    # Cambio realizado: Definir colores para las capas: {'Viviendas' => '#803A1A', 'Hogares' => '#AE7D1A', 'PersonasHogar' => '#E39000'}
+    # Fecha actualizado: 23/12/2015
+    # Cambio realizado: Asignar al atributo visible al valor false, en el atributo extruded, dentro de la propidad extrude en las capas {'Viviendas','Hogares','PersonasHogar'}
+    # Fecha actualizado: 28/12/2015
+    # Cambio realizado: Actualización colores para las capas: {'Viviendas' => '#5F3A1A', 'Hogares' => '#AF902F'}
+
 layers:
 
     earth:
@@ -635,52 +672,140 @@ layers:
                         family: Helvetica
                         size: 12px
                         fill: black
-    manzanas:
-        data: { source: manzanasSrc }
-        draw:
+    #manzanas:
+        #data: { source: manzanasSrc }
+        #draw:
             #lines:
-            polygons:
+            #polygons:
                 #order: 100
-                order: 5
-                color: '#9b194d'
+                #order: 5
+                #color: '#9b194d'
                 #width: [[7, .5px], [9, 1px], [14, 5px]]
-                interactive: true
-            text:
-                text_source: Manzana Ciudad
-                font:
-                    fill: white
-                    family: Futura
-                    size: 16px
-                    stroke: { color: black, width: 4 }
-    volumenConstrucciones:
-        data: { source: volumenConstruccionesSrc }
-        filter: function() { return feature.NRO_PISOS >= 0; }
-        draw:
-            polygons:
-                order: 6
-                color: '#79CC8A'
-                interactive: true
-                style: elevator
-            text:
+                #interactive: true
+                #visible: false
+            #text:
+                #text_source: 'Manzana Ciudad'
+                #font:
+                    #fill: white
+                    #family: Futura
+                    #size: 16px
+                    #stroke: { color: black, width: 4 }
+    #volumenConstrucciones:
+        #data: { source: volumenConstruccionesSrc }
+        #filter: function() { return feature.NRO_PISOS >= 0; }
+        #draw:
+            #polygons:
+                #order: 7
+                #color: '#79CC8A'                
+                #interactive: true
+                #style: none
+                #heigth: function() { return feature.NRO_PISOS; }
+                #outline: 
+                    #color: '#79CC8A'
+            #text:
                 #text_source: Edificio
-                font:
-                    fill: black
-                    family: Futura
-                    size: 18px
-                    stroke: { color: orange, width: 4 }
-        shaders:
-            blocks:
-                #color: |
+                #text_source: function() { if ((feature.NRO_PISOS >= 0))
+                                        # {return 'Piso'+' '+feature.NRO_PISOS; }}
+                #font:
+                    #Cambio color de la fuente - 10/12/2015
+                    #fill: '#9b194d'
+                    #family: Futura
+                    #family: Arial
+                    #size: 10px
+                    #stroke: { color: orange, width: 4 }
+        #sublayer:
+            #draw:
+                #polygons:
+                    #order: 6
+                    #color: '#79CC8A'
+                    #interactive: true
+                    #height: function() { return feature.NRO_PISOS; }
+        #shaders:
+            #blocks:
+                #color: 
                     #color.rgb = vec3(min((v_world_position.z*.0005 + .65),.8));
-                color: '#79CC8A'
-        extruded:
+                #color: '#79CC8A'
+        #extruded:
             #filter: { $zoom: { min: 15 } }
+            #filter: { $zoom: { min: 5 } }
+            #draw:                
+               #polygons:
+                    #style: buildings
+                    #style: elevator                    
+                    #extrude: function () { if (feature.NRO_PISOS > 0){return feature.NRO_PISOS > 0; }}
+                    #Fecha actualizado: 14/12/2015
+                    #extrude: function () { if (feature.NRO_PISOS > 0){return feature.NRO_PISOS; }}
+                    #height: function() { return feature.NRO_PISOS; }
+                    #Ensayo - 10Dic2015
+                    #color: '#FFEA6F'                    
+                    #color: '#C1876B'
+                    #color: ['153','153','153']
+    Viviendas:
+        data: { source: vihopeSrc }
+        draw:
+            polygons:            
+                order: 6
+                #color: '#79CC8A'
+                color: '#803A1A'
+                #color: ['','','','']
+                interactive: true
+                #visible: true
+            text:
+                text_source: function() { if (feature.TOT_VIV >= 0) {return 'Viviendas'+' '+feature.TOT_VIV; }}
+                font:
+                    fill: '#9b194d'
+                    family: Arial
+        extruded:
             filter: { $zoom: { min: 5 } }
             draw:
                 polygons:
-                    #style: buildings
-                    style: windows
-                    extrude: function () { return feature.NRO_PISOS > 0; }
+                    style: elevator
+                    extrude: function () { return feature.TOT_VIV; }
+                    #color: '#803A1A'
+                    color: '#5F3A1A'
+                    visible: false
+    Hogares:
+        data: { source: vihopeSrc }
+        draw:
+            polygons:             
+                order: 7
+                interactive: true                
+            text:
+                text_source: function() { if (feature.TOT_HOG >= 0) { return 'Hogares'+' '+feature.TOT_HOG; }}
+                font:
+                    fill: '#63a8de'
+                    family: Arial
+        extruded:
+            filter: { $zoom: { min: 5 } }
+            draw: 
+                polygons:
+                    style: elevator
+                    extrude: function () { return feature.TOT_HOG; }
+                    #color: '#AE7D1A'
+                    color: '#AF902F'
+                    visible: false
+    PersonasHogar:
+        data: { source: vihopeSrc }
+        draw:
+            polygons:
+                order: 8
+                interactive: true
+                color: '#E39000'
+                #visible: false
+            text:
+                text_source: function() { if (feature.TOT_PERHOG >= 0) { return 'Personas por hogar'+' '+feature.TOT_PERHOG; }}
+                font:
+                    fill: '#FF001C'
+                    family: Arial
+        extruded:
+            filter: { $zoom: { min: 5 } }
+            draw: 
+                polygons:
+                    style: none
+                    extrude: function () { return feature.TOT_PERHOG; }
+                    color: '#E39000'
+                    #color: ['252', '174', '23']
+                    visible: false
     # building_labels:
     #     data: { source: osm, layer: buildings }
     #     filter:
